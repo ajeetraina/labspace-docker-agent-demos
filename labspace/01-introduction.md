@@ -1,21 +1,69 @@
 # Introduction
 
-👋 Welcome to the **Labspace starter** lab! During this lab, you will learn to do the following:
+👋 Welcome to the **Docker Agent Demos** lab!
 
-- Learning Objective 1
-- Learning Objective 2
-- Learning Objective 3
-- Learning Objective 4
+By the end of this lab, you will:
 
+- Understand what Docker Agent is and how YAML-driven agents work
+- Run an AI agent that builds and deploys a live weather dashboard
+- Deploy a Docker Swag Store using a single AI agent
+- Orchestrate a full 5-agent pipeline where each agent handles a specialized role
 
-## 🙋 What is a Labspace again?
+---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis lacinia nisi sit amet auctor accumsan. Maecenas suscipit, libero quis ullamcorper pulvinar, dolor nisl vehicula orci, vel egestas arcu nibh eget enim. 
+## 🤖 What is Docker Agent?
 
-Suspendisse potenti. Pellentesque eleifend eget ante eu egestas. 
+Docker Agent is a framework for defining and running AI agents using a simple YAML file. Each agent:
 
-Nunc sit amet dapibus erat. Aliquam diam arcu, fringilla hendrerit metus sed, pellentesque fringilla lacus. 
+- Has a **model** (e.g. GPT-4o)
+- Has an **instruction** — a plain-language prompt describing what it should do
+- Has access to **toolsets** like `filesystem`, `shell`, and `todo`
+- Can optionally **delegate work to sub-agents**
 
-Nulla ornare nulla risus. Curabitur ut ipsum euismod, accumsan lorem eu, pretium lorem. Fusce imperdiet fermentum hendrerit.
+You describe the goal in YAML. Docker Agent takes care of the rest — writing files, running commands, building images, and deploying containers.
 
+---
 
+## ✅ Set up your environment
+
+### 1. Verify Docker is running
+
+```bash
+docker version
+```
+
+You should see both a Client and a Server version. If so, Docker is ready.
+
+### 2. Install Docker Agent
+
+Run the following commands to install Docker Agent as a CLI plugin:
+
+```bash
+curl -L -o /tmp/docker-agent https://github.com/docker/docker-agent/releases/latest/download/docker-agent-linux-amd64
+```
+
+```bash
+mkdir -p ~/.docker/cli-plugins
+mv /tmp/docker-agent ~/.docker/cli-plugins/docker-agent
+chmod +x ~/.docker/cli-plugins/docker-agent
+```
+
+### 3. Verify the install
+
+```bash
+docker agent version
+```
+
+You should see output showing the Docker Agent version.
+
+### 4. Confirm the demo files are in place
+
+```bash
+ls
+```
+
+You should see three directories: `weather-dashboard/`, `swag-store/single-agent/`, and `swag-store/multi-agent/`. Each contains a YAML agent definition and a README.
+
+---
+
+Ready? Move to the next section to deploy your first agent.

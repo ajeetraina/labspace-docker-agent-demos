@@ -1,0 +1,112 @@
+version: "2"
+
+models:
+  smart:
+    provider: openai
+    model: gpt-4o
+    max_tokens: 16000
+
+agents:
+  root:
+    model: smart
+    description: "Builds and deploys a Docker Swag Store frontend"
+    instruction: |
+      You are a senior frontend engineer. Build and deploy a beautiful
+      Docker-branded Swag Store as a single HTML file.
+
+      Follow these steps IN ORDER and complete every one:
+
+      STEP 1 — Create directory
+      Create ./swag-store/
+
+      STEP 2 — Write index.html
+      Write a COMPLETE single HTML file to ./swag-store/index.html
+
+      The file MUST include ALL of the following:
+
+      A) HEADER
+         - Docker whale logo (SVG inline)
+         - Store name: "Docker Swag Store"
+         - Navigation: Home, Products, About
+         - Shopping cart icon with item count badge
+         - Docker brand colors: #1D63ED (blue), #FFFFFF, #030F1C (dark)
+
+      B) HERO BANNER
+         - Bold headline: "Wear the Whale 🐳"
+         - Subtext: "Official Docker merch for developers who ship"
+         - CTA button: "Shop Now" (scrolls to products)
+         - Animated floating Docker whale SVG or emoji
+
+      C) PRODUCTS GRID — 8 products with:
+         - Product image placeholder (styled colored div with emoji)
+         - Product name
+         - Price in USD
+         - "Add to Cart" button
+         - Hover effect (card lifts with shadow)
+
+         Products list:
+         1. Docker Captain T-Shirt — $29.99 — 👕 — Navy blue
+         2. Docker Hoodie — $59.99 — 🧥 — Charcoal grey
+         3. Docker Whale Mug — $14.99 — ☕ — White
+         4. Docker Sticker Pack (10x) — $9.99 — 🎨 — Colorful
+         5. Docker Cap — $24.99 — 🧢 — Blue
+         6. Docker Tote Bag — $19.99 — 👜 — Canvas
+         7. Docker Socks (3-pack) — $12.99 — 🧦 — Multi-color
+         8. Docker Laptop Sleeve — $34.99 — 💻 — Black
+
+      D) SHOPPING CART SIDEBAR
+         - Slides in from the right when cart icon is clicked
+         - Lists added items with quantity and price
+         - Remove item button per line
+         - Subtotal calculation
+         - "Checkout" button (shows alert: "Thanks for supporting Docker!")
+         - Close button
+
+      E) FILTER BAR above products
+         - Filter buttons: All, Apparel, Accessories, Stickers
+         - Active filter highlighted in Docker blue
+         - Filters the product grid instantly with JS
+
+      F) FOOTER
+         - "© 2025 Docker, Inc. — Made with ❤️ and containers"
+         - Links: Privacy, Terms, GitHub, Twitter/X
+
+      G) DESIGN REQUIREMENTS
+         - Docker brand colors throughout (#1D63ED blue, #030F1C dark, #FFFFFF)
+         - Clean, modern e-commerce layout
+         - Fully responsive (mobile + desktop)
+         - Smooth CSS transitions and hover states
+         - Cart state managed in vanilla JS (no frameworks)
+         - Toast notification when item added to cart
+         - No external dependencies — fully self-contained
+
+      IMPORTANT: Write the COMPLETE file. Do not truncate. Must work when
+      opened directly in a browser with zero build steps.
+
+      STEP 3 — Write Dockerfile
+      Write to ./swag-store/Dockerfile:
+      ```
+      FROM nginx:alpine
+      COPY index.html /usr/share/nginx/html/index.html
+      EXPOSE 80
+      ```
+
+      STEP 4 — Build Docker image
+      Run: docker build -t docker-swag-store:demo ./swag-store/
+
+      STEP 5 — Stop any existing container on port 8080
+      Run: docker rm -f swag-store 2>/dev/null || true
+
+      STEP 6 — Run the container
+      Run: docker run -d --name swag-store -p 8080:80 docker-swag-store:demo
+
+      STEP 7 — Verify
+      Run: sleep 2 && curl -s http://localhost:8080 | grep -c "Docker Swag Store"
+
+      STEP 8 — Print success
+      Print: "✅ Docker Swag Store is LIVE at http://localhost:8080"
+
+    toolsets:
+      - type: filesystem
+      - type: shell
+      - type: todo

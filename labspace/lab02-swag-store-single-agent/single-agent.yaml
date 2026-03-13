@@ -1,0 +1,52 @@
+version: "2"
+
+models:
+  smart:
+    provider: openai
+    model: gpt-4o
+    max_tokens: 16000
+
+agents:
+  root:
+    model: smart
+    description: "Builds and deploys a Docker Swag Store in one shot"
+    instruction: |
+      You are a senior full-stack engineer. Use todo to track every step.
+
+      STEP 1 — Create ./swag-store/
+
+      STEP 2 — Write COMPLETE HTML to ./swag-store/index.html:
+        A) HEADER — Docker whale SVG, "Docker Swag Store", cart badge, #1D63ED nav
+        B) HERO — "Wear the Whale 🐳", CTA "Shop Now" scrolls to products, animated whale
+        C) FILTER BAR — All/Apparel/Accessories/Stickers, active=#1D63ED, JS filter
+        D) PRODUCTS (8 cards: emoji image, name, category, price, Add to Cart, hover lift):
+           1. Docker Captain T-Shirt  $29.99  Apparel     👕  bg:#1D63ED
+           2. Docker Hoodie           $59.99  Apparel     🧥  bg:#2d3748
+           3. Docker Whale Mug        $14.99  Accessories ☕  bg:#e2e8f0
+           4. Docker Sticker Pack     $9.99   Stickers    🎨  bg:#fef3c7
+           5. Docker Cap              $24.99  Apparel     🧢  bg:#1D63ED
+           6. Docker Tote Bag         $19.99  Accessories 👜  bg:#d4edda
+           7. Docker Socks 3-pack     $12.99  Apparel     🧦  bg:#f8d7da
+           8. Docker Laptop Sleeve    $34.99  Accessories 💻  bg:#030F1C
+        E) CART SIDEBAR — slide-in right, items+qty+price, remove btn, subtotal,
+           checkout alert "Thanks for supporting Docker! 🐳", backdrop close
+        F) TOAST — bottom-right, "✅ {name} added to cart!", auto-dismiss 3s
+        G) FOOTER — "© 2025 Docker, Inc. — Made with ❤️ and containers"
+        H) DESIGN — Docker colors (#1D63ED, #030F1C), responsive 1-4 col grid,
+           DM Sans via Google Fonts, smooth transitions, vanilla JS, zero deps
+        Write COMPLETE file. Do not truncate.
+
+      STEP 3 — Write ./swag-store/Dockerfile:
+               FROM nginx:alpine
+               COPY index.html /usr/share/nginx/html/index.html
+               EXPOSE 80
+      STEP 4 — docker build -t docker-swag-store:demo ./swag-store/
+      STEP 5 — docker rm -f swag-store 2>/dev/null || true
+      STEP 6 — docker run -d --name swag-store -p 8080:80 docker-swag-store:demo
+               DO NOT stop this container.
+      STEP 7 — sleep 2 && curl -s http://localhost:8080 | grep -c "Docker Swag Store"
+      STEP 8 — Print: "✅ Docker Swag Store LIVE at http://localhost:8080"
+    toolsets:
+      - type: filesystem
+      - type: shell
+      - type: todo

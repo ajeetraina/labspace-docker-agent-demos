@@ -1,0 +1,254 @@
+version: "2"
+
+models:
+  smart:
+    provider: openai
+    model: gpt-4o
+    max_tokens: 16000
+
+agents:
+  root:
+    model: smart
+    description: "Orchestrates 5 specialized agents to build and deploy the Docker Swag Store"
+    instruction: |
+      You are the root orchestrator. Your job is to delegate tasks to 5
+      specialized sub-agents IN ORDER and ensure each one completes before
+      moving to the next.
+
+      Workflow:
+      1. Delegate to spec_agent  — Write the product and UI specification
+      2. Delegate to code_agent  — Build the complete HTML application
+      3. Delegate to test_agent  — Validate the HTML output
+      4. Delegate to review_agent — Review code quality and design
+      5. Delegate to deploy_agent — Dockerize and deploy to port 8080
+
+      After all agents complete, print:
+      "✅ Docker Swag Store is LIVE at http://localhost:8080
+       Built by 5 AI agents using Docker Agent — one YAML, one prompt."
+
+    sub_agents:
+      - spec_agent
+      - code_agent
+      - test_agent
+      - review_agent
+      - deploy_agent
+
+    toolsets:
+      - type: todo
+      - type: think
+
+  spec_agent:
+    model: smart
+    description: "Writes a detailed product and UI specification for the Docker Swag Store"
+    instruction: |
+      You are a product manager and UX designer. Write a detailed technical
+      specification for the Docker Swag Store.
+
+      Use your todo tool to track steps.
+
+      STEP 1 — Create directory
+      Create ./swag-store/
+
+      STEP 2 — Write spec to ./swag-store/spec.md covering:
+        - Brand: Docker colors #1D63ED (blue), #030F1C (dark), #FFFFFF
+        - 8 products: T-Shirt $29.99, Hoodie $59.99, Mug $14.99,
+          Sticker Pack $9.99, Cap $24.99, Tote Bag $19.99,
+          Socks $12.99, Laptop Sleeve $34.99
+        - Pages/Sections: Header, Hero, Filter Bar, Products Grid,
+          Cart Sidebar, Footer
+        - Interactions: Add to cart, remove from cart, category filter,
+          toast notification, checkout alert
+        - Tech: Vanilla HTML/CSS/JS, self-contained, no frameworks
+        - Docker deployment: nginx:alpine on port 8080
+
+      STEP 3 — Confirm spec is written and summarize it.
+
+    toolsets:
+      - type: filesystem
+      - type: todo
+
+  code_agent:
+    model: smart
+    description: "Builds the complete Docker Swag Store HTML application"
+    instruction: |
+      You are a senior frontend engineer. Read the spec at ./swag-store/spec.md
+      and build the complete application.
+
+      Use your todo tool to track steps.
+
+      STEP 1 — Read ./swag-store/spec.md
+
+      STEP 2 — Write COMPLETE single HTML file to ./swag-store/index.html
+
+      The file MUST include ALL of the following:
+
+      A) HEADER
+         - Inline SVG Docker whale logo
+         - Store name: "Docker Swag Store"
+         - Cart icon with live item count badge
+         - Docker blue (#1D63ED) navbar
+
+      B) HERO BANNER
+         - Headline: "Wear the Whale 🐳"
+         - Subtext: "Official Docker merch for developers who ship"
+         - "Shop Now" CTA button (smooth scroll to products)
+         - Animated floating whale emoji
+
+      C) FILTER BAR
+         - Buttons: All | Apparel | Accessories | Stickers
+         - Active state highlighted in #1D63ED
+         - Instantly filters product grid via JS
+
+      D) PRODUCTS GRID (8 products)
+         Each card must have:
+         - Colored emoji placeholder image
+         - Product name, category tag, price
+         - "Add to Cart" button
+         - Hover lift effect
+
+         Products:
+         1. Docker Captain T-Shirt — $29.99 — Apparel — 👕 — #1D63ED bg
+         2. Docker Hoodie — $59.99 — Apparel — 🧥 — #2d3748 bg
+         3. Docker Whale Mug — $14.99 — Accessories — ☕ — #e2e8f0 bg
+         4. Docker Sticker Pack — $9.99 — Stickers — 🎨 — #fef3c7 bg
+         5. Docker Cap — $24.99 — Apparel — 🧢 — #1D63ED bg
+         6. Docker Tote Bag — $19.99 — Accessories — 👜 — #d4edda bg
+         7. Docker Socks 3-pack — $12.99 — Apparel — 🧦 — #f8d7da bg
+         8. Docker Laptop Sleeve — $34.99 — Accessories — 💻 — #030F1C bg
+
+      E) CART SIDEBAR
+         - Slides in from right on cart icon click
+         - List of added items with name, qty, price
+         - Remove button per item
+         - Subtotal auto-calculated
+         - "Checkout" button → alert "Thanks for supporting Docker! 🐳"
+         - Overlay backdrop, close on backdrop click
+
+      F) TOAST NOTIFICATIONS
+         - Bottom-right toast: "✅ {product} added to cart!"
+         - Auto-dismisses after 3 seconds
+         - Stacks if multiple added quickly
+
+      G) FOOTER
+         - "© 2025 Docker, Inc. — Made with ❤️ and containers"
+         - Links: GitHub, Twitter/X, Privacy, Terms
+
+      H) DESIGN
+         - Dark hero (#030F1C), white product section
+         - Fully responsive grid (1 col mobile, 4 col desktop)
+         - Smooth CSS transitions throughout
+         - Google Fonts: DM Sans (import via @import url)
+
+      IMPORTANT: Write the COMPLETE file. Do not truncate or summarize.
+      Must work when opened directly in a browser with zero build steps.
+
+      STEP 3 — Confirm file is written successfully.
+
+    toolsets:
+      - type: filesystem
+      - type: todo
+      - type: shell
+
+  test_agent:
+    model: smart
+    description: "Validates the Docker Swag Store HTML output"
+    instruction: |
+      You are a QA engineer. Validate the built application.
+
+      Use your todo tool to track steps.
+
+      STEP 1 — Read ./swag-store/index.html
+
+      STEP 2 — Check for presence of ALL these elements and report PASS/FAIL:
+        [ ] DOCTYPE html declaration present
+        [ ] Docker Swag Store title in <title> tag
+        [ ] All 8 product names present in HTML
+        [ ] "Add to Cart" buttons present (should be 8)
+        [ ] Cart sidebar HTML present
+        [ ] Filter buttons (All, Apparel, Accessories, Stickers) present
+        [ ] JavaScript for cart functionality present
+        [ ] CSS for responsive grid present
+        [ ] Footer text present
+        [ ] No broken external CDN links (file should be self-contained)
+
+      STEP 3 — Write test results to ./swag-store/test-report.md
+
+      STEP 4 — If any critical checks FAIL, write a list of issues found.
+               If all pass, write "All checks passed ✅"
+
+    toolsets:
+      - type: filesystem
+      - type: todo
+
+  review_agent:
+    model: smart
+    description: "Reviews code quality, design, and best practices"
+    instruction: |
+      You are a senior engineer doing code review. Review the application.
+
+      Use your todo tool to track steps.
+
+      STEP 1 — Read ./swag-store/index.html
+      STEP 2 — Read ./swag-store/test-report.md
+
+      STEP 3 — Review for:
+        - Code quality (clean JS, no console.log leaks, proper event listeners)
+        - Accessibility (alt attributes, button labels, color contrast)
+        - Performance (no blocking scripts, efficient DOM queries)
+        - Security (no eval(), no inline event handlers in loops)
+        - Docker brand consistency (correct colors used)
+        - Mobile responsiveness (media queries present)
+
+      STEP 4 — Write review to ./swag-store/review-report.md with:
+        - Overall score out of 10
+        - What's done well
+        - Suggestions for improvement
+
+      STEP 5 — Summarize the review score.
+
+    toolsets:
+      - type: filesystem
+      - type: todo
+      - type: think
+
+  deploy_agent:
+    model: smart
+    description: "Dockerizes and deploys the Docker Swag Store to port 8080"
+    instruction: |
+      You are a DevOps engineer. Deploy the application.
+
+      Use your todo tool to track steps.
+
+      STEP 1 — Read ./swag-store/index.html to confirm it exists
+
+      STEP 2 — Write Dockerfile to ./swag-store/Dockerfile:
+      FROM nginx:alpine
+      COPY index.html /usr/share/nginx/html/index.html
+      EXPOSE 80
+
+      STEP 3 — Build the Docker image
+      Run: docker build -t docker-swag-store:demo ./swag-store/
+
+      STEP 4 — Stop any existing container
+      Run: docker rm -f swag-store 2>/dev/null || true
+
+      STEP 5 — Run the container (keep it running — do NOT stop it)
+      Run: docker run -d --name swag-store -p 8080:80 docker-swag-store:demo
+
+      STEP 6 — Wait and verify
+      Run: sleep 3 && curl -s http://localhost:8080 | grep -c "Docker Swag Store"
+      Expected output: 1 or more
+
+      STEP 7 — Print image size
+      Run: docker images docker-swag-store:demo --format "Size: {{.Size}}"
+
+      STEP 8 — Print success
+      Print: "✅ Deployed! Docker Swag Store is LIVE at http://localhost:8080"
+
+      IMPORTANT: Do NOT run docker stop or docker rm after deploying.
+      Leave the container running.
+
+    toolsets:
+      - type: filesystem
+      - type: shell
+      - type: todo

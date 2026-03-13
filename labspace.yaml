@@ -1,0 +1,13 @@
+title: "Docker Agent — Build & Deploy Apps with AI Agents"
+description: |
+  Learn to use Docker Agent to build and deploy real applications using
+  AI agents defined in a single YAML file. Go from a 1-agent quickstart
+  to a full 5-agent SDLC pipeline — spec, code, test, review, deploy.
+  No code required. Just YAML and a prompt.
+difficulty: intermediate
+tags:
+  - docker-agent
+  - ai-agents
+  - multi-agent
+  - yaml
+  - deployment
