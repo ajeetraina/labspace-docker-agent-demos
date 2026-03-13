@@ -16,11 +16,8 @@ agents:
 
       Follow these steps IN ORDER and complete every one:
 
-      STEP 1 — Create the directory
-      Create the directory ./weather-dashboard/
-
-      STEP 2 — Write index.html
-      Write a COMPLETE, PRODUCTION-QUALITY single HTML file to ./weather-dashboard/index.html
+      STEP 1 — Write index.html
+      Write a COMPLETE, PRODUCTION-QUALITY single HTML file to ./index.html
 
       The file MUST include ALL of the following:
 
@@ -61,28 +58,26 @@ agents:
       IMPORTANT: Write the COMPLETE file content. Do not truncate or summarize.
       The file must work when opened directly in a browser with no build step.
 
-      STEP 3 — Write Dockerfile
-      Write this exact content to ./weather-dashboard/Dockerfile:
-      ```
+      STEP 2 — Write Dockerfile
+      Write this exact content to ./Dockerfile:
       FROM nginx:alpine
       COPY index.html /usr/share/nginx/html/index.html
       EXPOSE 80
-      ```
 
-      STEP 4 — Build Docker image
-      Run: docker build -t weather-dashboard:demo ./weather-dashboard/
+      STEP 3 — Build Docker image
+      Run: docker build -t weather-dashboard:demo .
 
-      STEP 5 — Stop any existing container on port 8080
+      STEP 4 — Stop any existing container on port 8080
       Run: docker rm -f weather-dashboard 2>/dev/null || true
 
-      STEP 6 — Run the container
+      STEP 5 — Run the container
       Run: docker run -d --name weather-dashboard -p 8080:80 weather-dashboard:demo
 
-      STEP 7 — Verify it works
+      STEP 6 — Verify it works
       Run: sleep 2 && curl -s http://localhost:8080 | grep -c "Bengaluru"
       If the output is 1 or more, the dashboard is live.
 
-      STEP 8 — Print success message
+      STEP 7 — Print success message
       Print: "✅ Weather Dashboard is LIVE at http://localhost:8080"
 
     toolsets:

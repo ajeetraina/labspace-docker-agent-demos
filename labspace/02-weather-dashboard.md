@@ -15,7 +15,7 @@ The agent will:
 Open the agent definition to see how the whole thing is described:
 
 ```bash no-run-button
-cat weather-dashboard/weather.yaml
+cat weather.yaml
 ```
 
 The YAML defines one `root` agent with a GPT-4o model and step-by-step instructions. The `filesystem` and `shell` toolsets give it the ability to write files and run Docker commands.
@@ -30,10 +30,10 @@ The YAML defines one `root` agent with a GPT-4o model and step-by-step instructi
     cd weather-dashboard
     ```
 
-2. Launch the agent with the prompt below:
+2. Launch the agent:
 
     ```bash
-    docker agent run weather.yaml "Build and deploy a production AccuWeather-style weather dashboard for Bengaluru, India. Create ./weather-dashboard/index.html as a complete single-file HTML app that fetches live weather from Open-Meteo API, shows current temperature, hourly forecast, 7-day forecast, and weather stats. Build a Docker image using nginx:alpine, run it on port 8080, and confirm it is live at http://localhost:8080"
+    docker agent run weather.yaml "Build and deploy a production AccuWeather-style weather dashboard for Bengaluru, India. Write index.html as a complete single-file HTML app that fetches live weather from Open-Meteo API, shows current temperature, hourly forecast, 7-day forecast, and weather stats. Build a Docker image using nginx:alpine, run it on port 8080, and confirm it is live at http://localhost:8080"
     ```
 
     > [!NOTE]
@@ -50,8 +50,10 @@ The YAML defines one `root` agent with a GPT-4o model and step-by-step instructi
 Run these commands to inspect the outputs:
 
 ```bash
-ls weather-dashboard/
+ls
 ```
+
+You should see `index.html` and `Dockerfile` in the current directory.
 
 ```bash
 docker images weather-dashboard:demo
@@ -60,8 +62,6 @@ docker images weather-dashboard:demo
 ```bash
 docker ps --filter name=weather-dashboard
 ```
-
-The agent built a real Docker image and started a container. The HTML file fetches live weather data from Open-Meteo every time the page loads.
 
 ---
 
