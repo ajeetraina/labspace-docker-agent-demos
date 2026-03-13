@@ -46,7 +46,6 @@ agents:
          - Smooth fade-in animations on load
          - Fully responsive (mobile + desktop)
          - Loading spinner while fetching data
-         - Error state if API fails
          - Footer: "Powered by Open-Meteo • Built with Docker Agent"
 
       H) WEATHER CODE MAPPING — Map Open-Meteo WMO codes to emoji + label:
@@ -54,6 +53,14 @@ agents:
          45,48=🌫️ Foggy, 51,53,55=🌦️ Drizzle, 61,63,65=🌧️ Rain,
          71,73,75=❄️ Snow, 80,81,82=🌧️ Showers, 95=⛈️ Thunderstorm,
          default=🌡️ Unknown
+
+      I) ERROR HANDLING — CRITICAL:
+         - Wrap the entire fetch in try/catch
+         - On ANY error (network, CORS, parse), show a large visible red/yellow
+           error box in the center of the page with the full error message text
+         - Also log errors with console.error()
+         - Never silently fail — always show the user what went wrong
+         - The loading spinner must be hidden on both success AND error
 
       IMPORTANT: Write the COMPLETE file content. Do not truncate or summarize.
       The file must work when opened directly in a browser with no build step.
